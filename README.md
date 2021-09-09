@@ -1,6 +1,14 @@
 This repository is used as a base for my Jekyll based blog on github-pages.
 It is build upon [this](https://github.com/barryclark/jekyll-now) repository created by [Barry Clark](https://github.com/barryclark).
 
+Run the site locally by:
+- Installing Ruby
+- Installing Bundler
+- Install the `github-pages` gem: `gem install github-pages`
+- Install `webrick` gem: `gem install webrick`
+- Serve the site by executing `jekyll serve --watch` from the source directory
+- Navigate to http://127.0.0.1:4000
+
 <details><summary>Original Readme</summary>
 > March, 2016: If you're on an old version of Jekyll Now and run into a) build warnings or b) syntax highlighting issues caused by [Jekyll 3 and GitHub Pages updates](https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0), just :sparkles:[update your _config.yml](https://github.com/barryclark/jekyll-now/pull/445/files):sparkles: and you'll be set!
 

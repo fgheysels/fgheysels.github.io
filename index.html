@@ -2,18 +2,17 @@
 layout: default
 ---
 
-<div class="wrapper">
+<div class="posts">
+  {% for post in site.posts %}
+    <article class="post">
 
-  <div class="row">
-    <div class="post-list">
-      {% for post in paginator.posts %}
-        {% include post-card.html %}
-      {% endfor %}
-    </div>
-  </div>
+      <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
 
-  <div class="row row--full">
-    {% include pagination.html %}
-  </div>
+      <div class="entry">
+        {{ post.excerpt }}
+      </div>
 
+      <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">Read More</a>
+    </article>
+  {% endfor %}
 </div>
