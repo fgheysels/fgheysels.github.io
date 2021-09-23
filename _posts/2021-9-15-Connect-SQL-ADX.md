@@ -3,14 +3,14 @@ layout: post
 title: Retrieve data from a SQL database in Azure Data Explorer
 ---
 
-Azure Data Explorer is a great and powerfull platform for working with timeseries data like sensor measurements, logs, etc... but it is not designed to store relational data or act as an OLTP database.
+Azure Data Explorer is a great and powerful platform for when you are working with timeseries data such as sensor measurements and logs.  Yet it is not designed to store relational data or act as an OLTP database.
 However, there can be situations where you want to combine relational data with the timeseries data that is stored in Azure Data Explorer.  This post briefly explains how this can be done.
 
-Imagine a farm where fruits are grown in a controlled environment.  The farmer can change all kind of settings in that environment -think about temperature, light, watering, ...  
+Imagine a farm where fruit is grown in a controlled environment.  The farmer can change all kinds of settings in that environment -think about temperature, light, watering, ...  
 The environment is equipped with numerous sensors that measure the temperature, humidity, size of the plants, etc...
-After each harvest, the farmer sows new plants and a new cycle starts, maybe with different settings in the controlled environment.
+After each harvest, the farmer sows new plants and a new cycle starts, perhaps with different settings, based on the experience of the last harvest,  and all in a controlled environment.
 
-Suppose the information on when a new cycle starts and stops is kept in an Azure SQL database, while all sensor-readings are ingested in an Azure Data Explorer database.  Now, what if you want to create a query in Azure Data Explorer which combines both the sensor-readings that are stored in Azure Data Explorer and the cycle information that is stored in Azure SQL ?  There are two ways to do that, and I'll describe both ways here.
+Suppose the information on when a new cycle starts and stops is kept in an Azure SQL database, while all sensor-readings are ingested in an Azure Data Explorer database.  Now, what if you want to create a query in Azure Data Explorer which combines both the sensor-readings that are stored in Azure Data Explorer, and the cycle information that is stored in Azure SQL ?  There are two ways to do that, and I'll describe both ways here.
 
 ## Use an external table
 
@@ -43,7 +43,7 @@ CyclusInformation
 | take 10
 ```
 
-The drawback of using external tables in KQL, is that filtering and ordering is done by Azure Data Explorer and not by SQL Server, while performance would be better if filtering and sorting would happen in SQL Server.
+The drawback of using external tables in KQL, is that filtering and ordering is done by Azure Data Explorer and not by SQL Server.  If one in SQL Server, the performance would be better.
 
 ## Use an inline SQL query
 
@@ -82,4 +82,4 @@ As can be seen in the above code snippets, both the `external table` and the `sq
 
 ## Conclusion
 
-We know that Azure Data Exporer is a great tool for working with timeseries data.  In this blog post we've shown that it is also possible to combine the data that is present in Data Explorer with external data.
+We know that Azure Data Exporer is a great tool for working with timeseries data.  In this blog post I've shown that it is also possible to combine the data that is present in Data Explorer with external data.
