@@ -74,10 +74,10 @@ As can be seen in the above code snippets, both the `external table` and the `sq
 - Enable Azure AD authentication on the Azure SQL Server.  This is done by defining an Azure AD Admin on the SQL Server
 - Create a user in the Azure SQL database that represents the service that accesses the SQL database.  In this case, this is the Azure Data Explorer cluster:
 
-  ```sql
-  CREATE USER {adx-cluster-name} FROM EXTERNAL PROVIDER
-  ALTER ROLE db_datareader ADD MEMBER {adx-cluster-name}
-  ```
+```sql
+CREATE USER {adx-cluster-name} FROM EXTERNAL PROVIDER
+ALTER ROLE db_datareader ADD MEMBER {adx-cluster-name}
+```
 
 - change the connectionstring to `Server=tcp:xxxxxx.database.windows.net,1433;Initial Catalog={databasename};Persist Security Info=False;User ID={adx-cluster-name};Authentication="Active Directory Integrated";`
 
