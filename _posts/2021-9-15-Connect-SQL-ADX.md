@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Retrieve data from a SQL database in Azure Data Explorer
+comments: false
 ---
 
 Azure Data Explorer is a great and powerful platform for when you are working with timeseries data such as sensor measurements and logs.  Yet it is not designed to store relational data or act as an OLTP database.
