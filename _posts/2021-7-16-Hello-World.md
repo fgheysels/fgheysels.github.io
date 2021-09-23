@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Hello, world!
-comments: true
+comments: false
 ---
 
 I've been [blogging on software development](http://fgheysels.blogspot.com/) in the past on another platform, but that blog didn't receive any attention anymore from me in the past decade.
