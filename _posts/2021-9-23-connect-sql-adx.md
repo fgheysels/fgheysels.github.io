@@ -19,30 +19,13 @@ An **external table** is an entity in Data Explorer that references data stored 
 
 Creating an external table that references a table in a SQL Server database is fairly easy:
 
-```kql
-.create external table CyclusInformation (id:int, cyclus_number:int, startdate:datetime, enddate:datetime) 
-kind=sql
-table=Cyclus
-(
-   h@'Server=tcp:xxxxx.database.windows.net,1433;Initial Catalog={databasename};Persist Security Info=False;User ID={username};Password={password};'
-)
-with
-(
-   createifnotexists = false,
-   primarykey = id,
-   firetriggers=id
-)
-```
+{% gist db371c2daa47715fcfd215b386c2ed13 external-table-create.kql %}
 
 The above statement creates an `external table` which is called `CyclusInformation` and it refers to the table `Cyclus` that exists in the SQL Server database defined by the connection-string.
 
 Once the `external table` is defined, you can query it via KQL just like you would do with any regular Data Explorer table:
 
-```kql
-CyclusInformation
-| project cyclus_number, startdate
-| take 10
-```
+{% gist db371c2daa47715fcfd215b386c2ed13 external-table-query-sample.kql %}
 
 The drawback of using external tables in KQL, is that filtering and ordering is done by Azure Data Explorer and not by SQL Server.  If one in SQL Server, the performance would be better.
 
@@ -53,18 +36,7 @@ However, the drawback here is that the `sql_request` plugin only returns a singl
 
 Given our scenario, suppose you want to retrieve measurements from Data Explorer that were valid in the cyclus with cyclus-number 4, you could use the following KQL query:
 
-```kql
-let cyclusinformation =
-  materialize (
-      evaluate sql_request('Server=tcp:xxxxx.database.windows.net,1433;Initial Catalog={databasename};Persist Security Info=False;User ID={usename};Password={password}',
-                           'SELECT startdate, enddate FROM Cyclus where cyclus_number = 4')
-  );
-let s = cyclusinformation | project startdate;
-let e = cyclusinformation | project enddate;
-metrics
-| where timestamp >= toscalar(s) and (isnull(toscalar(e)) or timestamp <= toscalar(e))
-| where tag == 'temperature'
-```
+{% gist db371c2daa47715fcfd215b386c2ed13 inline-query-sample.kql %}
 
 ## What about secrets
 
@@ -74,10 +46,7 @@ As can be seen in the above code snippets, both the `external table` and the `sq
 - Enable Azure AD authentication on the Azure SQL Server.  This is done by defining an Azure AD Admin on the SQL Server
 - Create a user in the Azure SQL database that represents the service that accesses the SQL database.  In this case, this is the Azure Data Explorer cluster:
 
-  ```sql
-  CREATE USER {adx-cluster-name} FROM EXTERNAL PROVIDER
-  ALTER ROLE db_datareader ADD MEMBER {adx-cluster-name}
-  ```
+  {% gist db371c2daa47715fcfd215b386c2ed13 create-msi-sql-user.sql %}
 
 - change the connectionstring to `Server=tcp:xxxxxx.database.windows.net,1433;Initial Catalog={databasename};Persist Security Info=False;User ID={adx-cluster-name};Authentication="Active Directory Integrated";`
 
