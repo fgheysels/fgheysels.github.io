@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Query a Data Lake using Azure Synapse
+title: Querying a Data Lake using Azure Synapse
 comments: true
 ---
 
@@ -17,7 +17,7 @@ To learn more about Azure Synapse, check out [this](https://azure.microsoft.com/
 
 ## Architecture overview
 
-When collecting telemetry from multiple devices, we need an IoT gateway that accepts all telemetry.  In this case, we'll be using an Azure IoT Hub for this.  The raw telemetry that is received from the devices, is dumped in a Data Lake.  Azure Synapse is linked to the Data Lake and this makes sure that SQL-like queries can be executed on the data that resides in the Data Lake.
+When collecting telemetry from multiple devices, we need an IoT gateway that accepts all telemetry.  In this case, we'll be using an Azure IoT Hub.  The raw telemetry that is received from the devices, is dumped in a Data Lake.  Azure Synapse is linked to the Data Lake and this makes sure that SQL-like queries can be executed on the data that resides in the Data Lake.
 An Azure Function uses this functionality to query the received raw telemetry and transform the data into a curated dataset.   A report can be built in PowerBI which uses the Synapse connector to query the curated dataset and display the results.
 
 ![Architecture overview](../images/posts/query-datalake-synapse/architecture-overview.png)
@@ -28,8 +28,8 @@ A basic implementation of this architecture can be found in [this GitHub reposit
 
 ## Storing raw telemetry in the Data Lake
 
-Storing the telemetry that is received in IoT Hub to a Data Lake is actually super-simple.  This can simply be done by leveraging the IoT Hub Routing functionality.
-Specify a route in IoT Hub that delivers the Device Telemetry messages to a Storage endpoint.  The Storage endpoint points to a Storage Account (StorageV2) that supports Hierarchical namespace.
+Storing the telemetry that is received in IoT Hub to a Data Lake is actually super simple.  This can be done by leveraging the IoT Hub Routing functionality.
+Specify a route in IoT Hub that delivers the Device Telemetry messages to a Storage endpoint.  The Storage endpoint points to a Storage Account (StorageV2) that supports Hierarchical Namespaces.
 
 It is important to think about the hierarchy or partitioning in where the messages will be stored.  In this case, we will periodically query for new messages that have been received, therefore we choose a hierarchy where we partition on enqueue-date.  So we set this 'filename-format' in the route-definition:
 
@@ -52,9 +52,9 @@ This means that files will be added to the data lake in a hierachy that looks li
 Now that the raw telemetry messages are stored in a Data Lake, there must a way to query that data.
 That's where Azure Synapse comes into the picture.
 
-Azure Synapse allows you to write SQL queries against the files that are stored in a DataLake.  The [`OPENROWSET`](https://docs.microsoft.com/en-us/azure/synapse-analytics/sql/develop-openrowset) function is what makes this possible.  This function allows to query CSV, JSON and parquet files that are present in Azure Storage.
+Azure Synapse allows you to write SQL queries against the files that are stored in a Data Lake.  The [`OPENROWSET`](https://docs.microsoft.com/en-us/azure/synapse-analytics/sql/develop-openrowset) function is what makes this possible.  This function allows to query CSV, JSON and parquet files that are present in Azure Storage.
 
-To make use of this, we create a database in the serverless SQL pool in Synapse.  By doing this we can create a view in that database that uses the `OPENROWSET` function to query the files that exist in the datalake.  The view is defined like this:
+To make use of this, we create a database in the serverless SQL pool in Synapse.  By doing this we can create a view in that database that uses the `OPENROWSET` function to query the files that exist in the Data Lake.  The view is defined like this:
 
 ```sql
 DROP VIEW IF EXISTS telemetrydata
@@ -75,7 +75,7 @@ Having this view allows you to write simpler queries.  Notice the usage of the `
 ### Building parquet files
 
 An Azure Function which is triggered by a timer, queries the view that we have defined in Synapse to retrieve the telemetry-data that has been received since the function's last run.  
-The function will build a parquet dataset and stores that dataset in another container in the DataLake.  I've choosen a timer-triggered Function instead of a Blob-trigger because I want to combine data from multiple input-files in one parquet file.
+The function will build a parquet dataset and stores that dataset in another container in the Data Lake.  I've choosen a timer-triggered Function instead of a Blob-trigger because I want to combine data from multiple input-files in one parquet file.
 
 Be aware that the Azure Function needs to have the Storage Blob Data Contributor role assigned to be able to read and write blobs in the DataLake.
 
@@ -94,7 +94,7 @@ The SQL statements that are generated by your PowerBI reports can be viewed via 
 
 ## Wrapping up
 
-This article shows how easy it can be to query data that is stored in a DataLake using SQL commands via Azure Synapse and how you can make use of hierarchies to partition the data to improve query performance.
+This article shows how easy it can be to query data that is stored in a Data Lake using SQL commands via Azure Synapse and how you can make use of hierarchies to partition the data to improve query performance.
 
 While this is certainly not a replacement for services like Azure Data Explorer, Azure Timeseries Insights, InfluxDb, ... in terms of performance and features, it allows you to build reports to get insights into your data.
 
