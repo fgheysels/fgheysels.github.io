@@ -99,4 +99,5 @@ This article shows how easy it can be to query data that is stored in a Data Lak
 While this is certainly not a replacement for services like Azure Data Explorer, Azure Timeseries Insights, InfluxDb, ... in terms of performance and features, it allows you to build reports to get insights into your data.
 
 Thanks for reading,
+
 Frederik
