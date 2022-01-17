@@ -2,7 +2,9 @@ This repository is used as a base for my Jekyll based blog on github-pages.
 It is build upon [this](https://github.com/barryclark/jekyll-now) repository created by [Barry Clark](https://github.com/barryclark).
 
 Run the site locally by:
+
 - Installing Ruby
+- Install [Jekyll](https://jekyllrb.com/docs/installation/windows/)
 - Installing Bundler
 - Install the `github-pages` gem: `gem install github-pages`
 - Install `webrick` gem: `gem install webrick`
