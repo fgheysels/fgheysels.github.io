@@ -1,8 +1,10 @@
 ---
 layout: post
 title: Adding Managed Identity users to an Azure SQL database via DevOps pipelines using the DacPac task
-comments: false
+comments: true
 ---
+
+Creating users in Azure SQL based on Managed Identity or AzureAD accounts is very simple yet very powerfull.  However, there are some issues when you want to create those kind of users in your Azure SQL database via Azure DevOps.  This post explains how to work around them.
 
 ## Introduction
 
