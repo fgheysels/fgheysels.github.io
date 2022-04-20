@@ -139,6 +139,12 @@ END
 > ⚠️ Note that the name of the credential must match the URL that points to the container that must be queried.
 > By specifiying `Managed Identity` to the `IDENTITY` property, you specify that Synapse SQL must connect to that location using Synapse's Managed Identity.
 
+Once the credential is created, you need to grant reference rights on the credential to the login:
+
+```sql
+GRANT REFERENCES ON CREDENTIAL::[https://<storage account name>.blob.core.windows.net/<container_name>] TO [my_sql_username]
+```
+
 ### Create a USER in your database
 
 With the LOGIN and CREDENTIAL created, you can connect to the Serverless SQL endpoint in Synapse, but you might need to login to a specific database that you've created in Synapse.
