@@ -59,7 +59,11 @@ By executing the following commands, the required access rights will be set:
 - Creating a role-assignment in Synapse to add the group to the `Synapse SQL Administrator` role:
 
   ```bash
-  az synapse role assignment create --workspace-name $(Synapse.Name) --role "Synapse SQL Administrator" --assignee-object-id $(object_id_of_group) --assignee-principal-type Group
+  az synapse role assignment create `
+    --workspace-name $(Synapse.Name) `
+    --role "Synapse SQL Administrator" `
+    --assignee-object-id $(object_id_of_group) 
+    --assignee-principal-type Group
   ```
 
   >⚠️Note that I'm using the `az synapse role assignment create` command that is taking the `--assignee-object-id` parameter in conjunction with the `--assignee-principal-type` parameter instead of the more straightforward approach where you just specify the `--assignee` as shown in the examples [here](https://docs.microsoft.com/en-us/cli/azure/synapse/role/assignment?view=azure-cli-latest#az-synapse-role-assignment-create-examples).  The reason for this is a bug I've found and reported [here](https://github.com/Azure/azure-cli/issues/22078).
