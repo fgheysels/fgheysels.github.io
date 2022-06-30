@@ -34,3 +34,7 @@ This is how it's done:
 ```
 
 An additional advantage of this approach, is that unlike `SqlAzureDacpacDeployment@1`, you can also execute this on Linux agents.
+
+Hope you find this useful!
+
+Frederik

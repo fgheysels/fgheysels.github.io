@@ -5,9 +5,10 @@ comments: true
 ---
 
 In 2021, Microsoft released a feature of Azure Container Registry called 'connected registry' in public preview.
-A connected registry allows you to install a container registry on-prem which synchronizes or mirrors with an Azure Container Registry in the cloud.  This allows you to have your container images nearby which is beneficial in scenario's where you have an occasional or limited connection with the cloud.  You can find more information regarding the connected registry connected registry container workloads.
+A connected registry allows you to install a container registry on-prem which synchronizes or mirrors with an Azure Container Registry in the cloud.  This allows you to have your container images nearby which is beneficial in scenario's where you have an occasional or limited connection with the cloud.  At the moment that you want to pull a container image, the image doesn't need to be pulled from Azure, but is already present closer to where you need it.
+[Here](https://docs.microsoft.com/en-us/azure/container-registry/intro-connected-registry), you can find more information regarding the connected registry container workloads.
 
-I have explained in [another blogpost](https://www.codit.eu/blog/how-acrs-connected-registry-feature-helps-us-shipping-containers/) how we use connected registry bring containers on board of vessels.
+I have explained in [another blogpost](https://www.codit.eu/blog/how-acrs-connected-registry-feature-helps-us-shipping-containers/) how we use connected registry to bring containers on board of vessels.
 
 In this article, I'll go a bit deeper in the technicalities on how to deploy a connected registry.
 
@@ -42,12 +43,18 @@ $repositoriesToSyncString = $repositoriesToSync | % {"""$_"""} | Join-String -Se
 
 ### Create the connected registry Azure Resource
 
+Once we have all the required information, the connected registry resource in Azure can be created.
+
 ```powershell
 # Create the connected registry instance.  Use the invoke-expression command, because the $repositoriesToSyncString variable otherwise gives some issues
 $connectedRegistryName = "myconnectedregistry"
 
 Invoke-Expression "az acr connected-registry create --name $connectedRegistryName --registry $azureContainerRegistry --mode ReadOnly --sync-schedule '30 * * * *' --sync-window PT1H --repository $repositoriesToSyncString"
 ```
+
+With the above command, we specify that the connected registry must sync all repositories that are listed in the `$repositoriesToSyncString`.
+The connected registry can only read from the parent ACR since the mode is set to `ReadOnly`.
+Syncing happens every hour at minute 30 and the sync window is set to 1 hour.
 
 ## Deploy the connected registry on-prem components
 
@@ -57,7 +64,8 @@ In this article, we'll focus on deploying a connected registry in a Kubernetes c
 
 ### Get the connection-string of the connected registry
 
-Before we can deploy the connected registry components, we need to get hold of the connection-string since we need to specify that information during deployment.
+Before we can deploy the connected registry components, we need to get hold of the connection-string of the connected registry resource that exists in Azure.
+We will need this information when deploying the on-prem components, so let's just quickly retrieve the required information.
 
 ```powershell
 $credentials = az acr connected-registry get-settings `
@@ -182,7 +190,7 @@ sudo -E chmod 644 /etc/rancher/k3s/registries.yaml || true
 
 After the `registries.yaml` file has been modified, K3s must be restarted for the changes to have effect:
 
-```
+```bash
 sudo -E systemctl restart k3s
 ```
 
@@ -190,7 +198,7 @@ The connected registry is now in place and will start pulling container images f
 
 # Pulling images from a connected registry
 
-Now that the connected registry components are in place, we need to configure it so that images can be pulled from the connected registry.
+Now that the connected registry components are up and running, we need to configure it so that images can be pulled from the connected registry.
 
 ## Configure Client Token
 
@@ -248,3 +256,10 @@ $connectedRegistryUrl = "http://$($connectedRegistryIpAddress):80"
 kubectl delete secret mypullsecretname --ignore-not-found -n mynamespace
 kubectl create secret docker-registry mypullsecretname --docker-server=$connectedRegistryUrl --docker-username=$pullSecretUserName --docker-password=$pullSecretPassword -n mynamespace
 ```
+
+Now you can use this pull secret in your Kubernetes deployments to pull container images from your Connected Registry!
+Just don't forget to specify the pull secret in your Kubernetes deployment.yaml manifest.
+
+I hope this article helps you in setting up an Azure Connected Registry!
+
+Frederik
