@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Getting started with Azure Connected Registry
+title: How to install and use an Azure Connected Registry
 comments: true
 ---
 
