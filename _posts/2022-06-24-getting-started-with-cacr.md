@@ -242,7 +242,8 @@ az acr connected-registry update --registry $azureContainerRegistryName --name $
 
 ## Create a Pull Secret for the Connected Registry
 
-When you want to pull images in Kubernetes, you need a pull secret.  The `$token` that we have just generated, can be used to create a pull secret for the connected registry:
+When you want to pull images in Kubernetes, you need a pull secret.  
+The `$token` that we have just generated, can be used to create a pull secret for the connected registry:
 
 ```powershell
 $pullSecretUserName = $token.credentials.username
