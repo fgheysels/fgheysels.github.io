@@ -1,0 +1,22 @@
+## Enable Direct Management API via ARM template
+
+```json
+{
+    "type": "Microsoft.ApiManagement/service/tenant",
+    "apiVersion": "2020-06-01-preview",
+    "name": "[concat(parameters('Apim.Name'), '/access')]",
+    "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service', parameters('Apim.Name'))]"
+    ],
+    "properties": {
+        "enabled": true
+    }
+}
+```
+
+## Retrieve identifiers using Powershell
+
+```pwsh
+$apimContext = New-AzApiManagementContext -resourceGroupName <rg-name> -serviceName <apim-name>
+Get-AzApiManagementTenantAccess -context $apimContext
+```
