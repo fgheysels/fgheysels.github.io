@@ -6,6 +6,7 @@ comments: true
 
 In 2021, Microsoft released a feature of Azure Container Registry called 'connected registry' in public preview.
 A connected registry allows you to install a container registry on-prem which synchronizes or mirrors with an Azure Container Registry in the cloud.  This allows you to have your container images nearby, which is beneficial in scenario's where you have an occasional or limited connection with the cloud.  At the moment that you want to pull a container image, the image doesn't need to be pulled from Azure, but is already present closer to where you need it.
+
 [Here](https://docs.microsoft.com/en-us/azure/container-registry/intro-connected-registry), you can find more information regarding the connected registry container workloads.
 
 I have explained in [another blogpost](https://www.codit.eu/blog/how-acrs-connected-registry-feature-helps-us-shipping-containers/) how we use connected registry to bring containers on board of vessels.
