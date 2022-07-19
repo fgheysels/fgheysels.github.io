@@ -5,14 +5,22 @@ comments: true
 ---
 
 In 2021, Microsoft released a feature of Azure Container Registry called 'connected registry' in public preview.
-A connected registry allows you to install a container registry on-prem which synchronizes or mirrors with an Azure Container Registry in the cloud.  This allows you to have your container images nearby which is beneficial in scenario's where you have an occasional or limited connection with the cloud.  At the moment that you want to pull a container image, the image doesn't need to be pulled from Azure, but is already present closer to where you need it.
+A connected registry allows you to install a container registry on-prem which synchronizes or mirrors with an Azure Container Registry in the cloud.  This allows you to have your container images nearby, which is beneficial in scenario's where you have an occasional or limited connection with the cloud.  At the moment that you want to pull a container image, the image doesn't need to be pulled from Azure, but is already present closer to where you need it.
 [Here](https://docs.microsoft.com/en-us/azure/container-registry/intro-connected-registry), you can find more information regarding the connected registry container workloads.
 
 I have explained in [another blogpost](https://www.codit.eu/blog/how-acrs-connected-registry-feature-helps-us-shipping-containers/) how we use connected registry to bring containers on board of vessels.
 
-In this article, I'll go a bit deeper in the technicalities on how to deploy a connected registry.
+In this article, I'll dive a bit deeper in the technicalities on how to deploy a connected registry via scripting.
+Scripting is great, as it allows you to automate your deployments.
+
+Let's dive right into this!
 
 # Installing a connected registry
+
+Before we can pull images from a connected registry, we need to install one. This consists of 2 parts:
+
+- Create a connected registry instance in Azure.
+- Deploy the required connected registry components on the machine that will actually host the connected registry.
 
 ## Define a connected registry instance in Azure
 
