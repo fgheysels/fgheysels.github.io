@@ -4,7 +4,7 @@ title: How to use named values with JSON content in Azure API Management Policie
 comments: true
 ---
 
-When you want to use a `Named Value` in Azure API Management that contains a JSON string inside an APIM policy expression, you might run into some problems.
+When you want to use a `Named Value` in Azure API Management that contains a JSON string in an APIM policy expression, you might run into some problems.
 In this blogpost, I'm going to cover how I worked around them and finally fixed them.
 
 # What do I want to achieve ?
@@ -22,7 +22,8 @@ I then created an APIM policy that would use this named value, like this:
 </set-header>
 ```
 
-and I thought I was done.  Unfortunately it is not possible to dynamically construct and use named values.  I learned that named values are not evaluated at run-time when executing a policy.  Instead, the `named value` reference is replaced by it's value when the APIM policy is saved, and therefore it is obvious that you cannot dynamically reference `named value` instances.
+And by that, I thought I was done.  
+Unfortunately it is not possible to dynamically construct and use named values.  I learned that named values are not evaluated at run-time when executing a policy.  Instead, the `named value` reference is replaced by it's value when the APIM policy is saved, and therefore it is obvious that you cannot dynamically reference `named value` instances.
 
 # JSON to the rescue ?
 
