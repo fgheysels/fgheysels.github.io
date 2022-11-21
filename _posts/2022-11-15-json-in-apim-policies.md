@@ -9,9 +9,13 @@ In this blogpost, I'm going to cover how I worked around them and finally fixed 
 
 # What do I want to achieve ?
 
-I have an API defined in API Management for which multiple products are defined.  Depending on the product that is used when calling the API (based on the subscription key), I want to pass in a specific value to the backend.
+I have an API defined in API Management, and I have defined multiple [APIM Products](https://learn.microsoft.com/en-us/azure/api-management/api-management-key-concepts#products) defined for this API. 
+When a consumer sends requests to the API, I want to pass in some additional information to the backend.  The content of this additional information can vary depending on the APIM Product to which the consumer has subscribed to.
+Azure APIM can determine -based on the subscription key that is used- in what _Product context_ the API is being called and based on that, I can decide what additional information must be send to the backend.
 
-My first approach was to define a `named value` in APIM for every product that is defined.  The name of each `named value` followed a specific convention: `some-value-<productname>`.  For instance, `some-value-product-a`, `some-value-product-b`, etc...
+My first approach was to define a `named value` in APIM for every APIM product that is defined.  The name of each `named value` followed a specific convention: `some-value-<productid>`.  
+
+Suppose I have 2 APIM products defined with the ID's `product-a` and `product-b`, I would have these `named values`: `some-value-product-a`, `some-value-product-b`.
 
 I then created an APIM policy that would use this named value, like this:
 
@@ -22,7 +26,7 @@ I then created an APIM policy that would use this named value, like this:
 </set-header>
 ```
 
-And by that, I thought I was done.  
+And by that, I thought I was done as I would add an additional header to the backend request where the value of that header would be the content of the `named value` that corresponds with the product context.
 Unfortunately it is not possible to dynamically construct and use named values.  I learned that named values are not evaluated at run-time when executing a policy.  Instead, the `named value` reference is replaced by it's value when the APIM policy is saved, and therefore it is obvious that you cannot dynamically reference `named value` instances.
 
 # JSON to the rescue ?
@@ -74,13 +78,13 @@ The final solution looks like this:
         var contents = (string)context.Variables["myvariable"];
         var minifiedJson = contents.Replace("\n", "").Replace("\r", "").Replace("\\", "");
 
-        var parsedJson = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(minifiedJson);
+        var parsedJson = JObject.Parse(minifiedJson);
 
         if( parsedJson.ContainsKey(context.Product.Id) == false )
         {
             return "some-fallback-value";
         }
-        return (string)parsedJson[context.Product.Id];
+        return parsedJson[context.Product.Id].Value<string>();
     }
     </value>
 </set-header>
