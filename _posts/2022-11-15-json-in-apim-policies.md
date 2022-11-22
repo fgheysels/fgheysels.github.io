@@ -92,5 +92,7 @@ The final solution looks like this:
 
 Pay attention to the fact that you need to do some string replacements before you're able to parse the JSON contents of the `named value`.
 
+> When deploying this API Management Policy via the `Set-AzApiManagementPolicy` Powershell Cmdlet, be sure to specify the `-Format application/vnd.ms-azure-apim.policy.raw+xml` parameter, otherwise the validation of the policy will fail.
+
 Hope this helps!
 Frederik
