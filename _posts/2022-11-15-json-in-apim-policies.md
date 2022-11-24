@@ -21,8 +21,7 @@ I then created an APIM policy that would use this named value, like this:
 
 ```json
 <set-header name="myheader" exist-action="override">
-    <value>{{some-value-@(context.Product.Id)}}</value>    
-    </value>
+    <value>{{some-value-@(context.Product.Id)}}</value>
 </set-header>
 ```
 
@@ -43,7 +42,7 @@ To work around this, I thought of creating one single `named value` that contain
 
 The idea was to retrieve and parse this named value in the `set-header` policy:
 
-```json
+```xml
 <set-header name="myheader" exist-action="override">
     <value>
     @{
@@ -69,7 +68,7 @@ The final solution is to make use of the `set-variable` policy.  For some reason
 
 The final solution looks like this:
 
-```json
+```xml
 <set-variable name="myvariable" value="{{my-named-value}}" />
 
 <set-header name="myheader" exists-action="override">
