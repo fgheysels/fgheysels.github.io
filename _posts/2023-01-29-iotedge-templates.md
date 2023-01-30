@@ -50,7 +50,7 @@ When you execute the `fgiotedgemodule` template from the location where the `.sl
 
 These parameters are available when creating an IoT Edge module project using the `fgiotedgemodule` template:
 
-|parameter|description
+|**parameter**|**description**
 |-|-|
 |repository|The address of the image container repository.  If not specified, the `module.json` file specifies the repository as a variable that can be set / replaced during deployment.
 |no-backgroundservices|Specifies that a module must be generated which does not make use of hosted background-services.  (Default: false)
