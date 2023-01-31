@@ -20,9 +20,11 @@ Suppose I have 2 APIM products defined with the ID's `product-a` and `product-b`
 I then created an APIM policy that would use this named value, like this:
 
 ```json
+{% raw %}
 <set-header name="myheader" exist-action="override">
     <value>{{some-value-@(context.Product.Id)}}</value>
 </set-header>
+{% endraw %}
 ```
 
 And by that, I thought I was done as I would add an additional header to the backend request where the value of that header would be the content of the `named value` that corresponds with the product context.
