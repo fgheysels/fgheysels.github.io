@@ -4,7 +4,7 @@ title: Execute SQL commands in Azure DevOps pipelines using Azure AD authenticat
 comments: true
 ---
 
-In this [blogpost](2022-03-30-managed-identity-users-in-sql-via-devops.md), I mentionned that it was not possible to execute a `SqlAzureDacpacDeployment@1` task.  As mentionned [here](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/deploy/sql-azure-dacpac-deployment?view=azure-devops), using Azure AD authentication is not supported on hosted agents, you need to create a private DevOps agent.
+In this [blogpost](https://fgheysels.github.io/managed-identity-users-in-sql-via-devops/), I mentionned that it was not possible to execute a `SqlAzureDacpacDeployment@1` task.  As mentionned [here](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/deploy/sql-azure-dacpac-deployment?view=azure-devops), using Azure AD authentication is not supported on hosted agents, you need to create a private DevOps agent.
 But, it is possible to execute SQL commands against an Azure SQL Server using Azure AD authentication, albeit not via DacPac.
 
 It is actually pretty simple:  instead of using the `SqlAzureDacpacDeployment@1` task, we simply make use of the `Invoke-SqlCmd` Powershell CmdLet.
