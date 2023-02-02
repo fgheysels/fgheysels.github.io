@@ -4,7 +4,7 @@ title: Accessing private Blob containers from Synapse
 comments: true
 ---
 
-Querying data in an Azure Data Lake is quite easy with Azure Synapse as explained [here](./2021-11-24-querying-datalake-with-synapse.md).
+Querying data in an Azure Data Lake is quite easy with Azure Synapse as explained [here](https://fgheysels.github.io/querying-datalake-with-synapse/).
 However, when the data that is stored in your Data Lake is not publicly available to everybody (in most cases, you don't want to have your data exposed to anonymous users), there are some things that you need to consider.
 In this blog, I'll try to go over those specificalities.
 
